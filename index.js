@@ -1,80 +1,108 @@
-const superagent = require('superagent')
+const superagent = require('superagent');
 
-const API_BASE_URL = 'https://deckofcardsapi.com/api/deck'
+const API_BASE_URL = 'https://deckofcardsapi.com/api/deck';
 
-const _fetch = (composed, query = {}) => {
-    return new Promise((resolve, reject) => {
-        return superagent.get(`${API_BASE_URL}/${composed}`)
-                .query(query)
-                .then(response => resolve(response.body))
-                .catch(response => reject(response.error))
-    })
-}
+/**
+ * helper function to make the GET request to the Deck of Cards API
+ * @param {string} composed - the composed url
+ * @param {object} query - the query parameter object
+ */
+const _fetch = async (composed, query = {}) => {
+    const res = await superagent.get(`${API_BASE_URL}/${composed}`).query(query);
+    return res.body;
+};
 
-const _buildQueryArgs = ({deck_count, count, cards }) => {
-    const query = {}
+/**
+ * helper function to build a query parameter object to use when making GET request to the Deck of Cards API
+ * @param {object} args
+ */
+const _buildQueryArgs = (args) => {
+    const { deck_count, count, cards } = args;
 
-    if (deck_count)
-        query.deck_count = deck_count
+    const query = {};
 
-    if (count)
-        query.count = count
+    if (deck_count) {
+        query.deck_count = deck_count;
+    }
 
-    if (cards)
-        query.cards = cards.join(',')
+    if (count) {
+        query.count = count;
+    }
 
-    return query
-}
+    if (cards) {
+        query.cards = cards.join(',');
+    }
 
-const deck = (options = {}) => {
-    const
-        { shuffle, deck_count, cards } = options,
-        query = _buildQueryArgs({ deck_count, cards })
+    return query;
+};
 
-    if (shuffle)
-        return _fetch(`new/shuffle/`, query)
-    else
-        return _fetch(`new/`, query)
-}
+/**
+ * get a deck of cards
+ * @param {object} options - the available options when getting a deck of card
+ */
+const deck = async (options = {}) => {
+    const { shuffle, deck_count, cards } = options;
+    const query = _buildQueryArgs({ deck_count, cards });
 
-const reshuffle = (deckId) => {
-    return _fetch(`${deckId}/shuffle/`)
-}
+    if (shuffle) {
+        return await _fetch(`new/shuffle/`, query);
+    } else {
+        return await _fetch(`new/`, query);
+    }
+};
 
-const draw = (deckId, options = {}) => {
-    const
-        { count } = options,
-        query = _buildQueryArgs({ count })
+/**
+ * reshuffle a deck of cards
+ * @param {string} deckId - the id of a deck of cards
+ */
+const reshuffle = async (deckId) => {
+    return await _fetch(`${deckId}/shuffle/`);
+};
 
-    return _fetch(`${deckId}/draw/`, query)
-}
+/**
+ * draw from a deck of cards
+ * @param {string} deckId - the id of a deck of cards
+ * @param {object} options - the available options when drawing from a deck of card
+ */
+const draw = async (deckId, count) => {
+    const { count } = options;
+    const query = _buildQueryArgs({ count });
 
+    return await _fetch(`${deckId}/draw/`, query);
+};
+
+/**
+ * draw from a deck of cards
+ * @param {string} deckId - the id of a deck of cards
+ * @param {string} pileName - the name given to a pile
+ */
 const pile = (deckId, pileName) => {
     return {
-        add: cards => {
-            const query = _buildQueryArgs(cards)
-            return _fetch(`${deckId}/pile/${pileName}/add/`, query)
+        add: async (cards) => {
+            const query = _buildQueryArgs(cards);
+            return await _fetch(`${deckId}/pile/${pileName}/add/`, query);
         },
-        draw: ({ cards, count, bottom }) => {
-            const query = _buildQueryArgs({ cards, count })
+        draw: async ({ cards, count, bottom }) => {
+            const query = _buildQueryArgs({ cards, count });
 
-            if (bottom)
-                return _fetch(`${deckId}/pile/${pileName}/draw/bottom`)
-            else
-                return _fetch(`${deckId}/pile/${pileName}/draw/`, query)
+            if (bottom) {
+                return await _fetch(`${deckId}/pile/${pileName}/draw/bottom`);
+            } else {
+                return await _fetch(`${deckId}/pile/${pileName}/draw/`, query);
+            }
         },
-        shuffle: () => {
-            return _fetch(`${deckId}/pile/${pileName}/shuffle/`)
+        shuffle: async () => {
+            return await _fetch(`${deckId}/pile/${pileName}/shuffle/`);
         },
-        show: () => {
-            return _fetch(`${deckId}/pile/${pileName}/list/`)
+        show: async () => {
+            return await _fetch(`${deckId}/pile/${pileName}/list/`);
         }
-    }
-}
+    };
+};
 
 module.exports = {
     deck,
     draw,
     reshuffle,
     pile
-}
+};

@@ -1,33 +1,42 @@
 # deckofcards-api
-Unofficial Node.js Wrapper for Deck of Cards API. (https://deckofcardsapi.com/)
+
+Unofficial Node.js Library for interacting with the Deck of Cards API. (https://deckofcardsapi.com/)
 
 --
+
 ### Install
+
 ```
 npm install --save deckofcards-api
 ```
 
 --
+
 ### API Methods
 
+##### deck(options)
 
-##### deck({ shuffle, deck_count, cards })
-Get a deck of cards.
+Get a deck of cards with an optional options object.
 
 ```
 const cards = require('deckofcards-api')
 
-// optional
+// get a deck with the default options
+cards.deck()
+
+// configure deck options
 const options = {
     shuffle: boolean // default: false
     deck_count: int  // default: 1
     cards: Array     // All 52 cards
 }
+// get a deck with custom options
 cards.deck(options)
 
 ```
 
 ##### reshuffle(deckId)
+
 Reshuffle a deck of cards by id.
 
 ```
@@ -39,6 +48,7 @@ cards.reshuffle(deck.deck_id)
 ```
 
 ##### draw(deckId)
+
 Draw cards.
 
 ```
@@ -52,6 +62,7 @@ cards.draw(deck.deck_id, count)
 ```
 
 ##### pile(deckId, pileName).add(cards)
+
 Add cards to a pile.
 
 ```
@@ -67,6 +78,7 @@ cards.pile(deckId, pileName).add(cards)
 ```
 
 ##### pile(deckId, pileName).draw(cards)
+
 Draw cards from a pile by card names, count or bottom.
 
 ```
@@ -96,6 +108,7 @@ cards.pile(deckId, pileName).draw(bottom)
 ```
 
 ##### pile(deckId, pileName).shuffle()
+
 Shuffle the pile.
 
 ```
@@ -109,6 +122,7 @@ cards.pile(deckId, pileName).shuffle()
 ```
 
 ##### pile(deckId, pileName).show()
+
 Show cards in the pile.
 
 ```
