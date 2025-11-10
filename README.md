@@ -1,5 +1,8 @@
 # deckofcards-api
 
+[![Tests](https://github.com/cydneymikel/deckofcards-api/actions/workflows/test.yml/badge.svg)](https://github.com/cydneymikel/deckofcards-api/actions/workflows/test.yml)
+[![npm version](https://badge.fury.io/js/deckofcards-api.svg)](https://www.npmjs.com/package/deckofcards-api)
+
 Unofficial Node.js Library for interacting with the Deck of Cards API. (https://deckofcardsapi.com/)
 
 --
