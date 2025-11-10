@@ -1,12 +1,10 @@
-const expect = require('chai').expect;
+import { expect } from 'chai';
+import * as api from '../index.js';
 
-const api = require('../');
 const DECK_SIZE = 52;
 
 describe('Deck Of Cards API', () => {
     describe('deck', () => {
-        let deck_id;
-
         it('should get a new unshuffled deck', async () => {
             const deck = await api.deck();
 
@@ -14,8 +12,6 @@ describe('Deck Of Cards API', () => {
             expect(deck).to.have.property('deck_id');
             expect(deck).to.have.property('success').and.to.equal(true);
             expect(deck).to.have.property('remaining').and.to.equal(DECK_SIZE);
-
-            deck_id = deck.deck_id;
         });
 
         it('should get multiple shuffled decks', async () => {
@@ -58,7 +54,7 @@ describe('Deck Of Cards API', () => {
             const deck = await api.deck({ shuffle: true });
             const options = { count: 2 };
 
-            drawn = await api.draw(deck.deck_id, options);
+            const drawn = await api.draw(deck.deck_id, options);
 
             expect(drawn).to.have.property('deck_id').and.to.equal(deck.deck_id);
             expect(drawn).to.have.property('success').and.to.equal(true);

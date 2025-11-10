@@ -18,119 +18,141 @@ npm install --save deckofcards-api
 
 Get a deck of cards with an optional options object.
 
-```
-const cards = require('deckofcards-api')
+```javascript
+import * as cards from 'deckofcards-api';
 
 // get a deck with the default options
-cards.deck()
+await cards.deck()
 
 // configure deck options
 const options = {
-    shuffle: boolean // default: false
-    deck_count: int  // default: 1
-    cards: Array     // All 52 cards
+    shuffle: boolean        // default: false
+    deck_count: int         // default: 1
+    cards: Array            // All 52 cards
+    jokers_enabled: boolean // default: false, adds 2 jokers (54 cards total)
 }
 // get a deck with custom options
-cards.deck(options)
+await cards.deck(options)
 
 ```
 
-##### reshuffle(deckId)
+##### reshuffle(deckId, options)
 
 Reshuffle a deck of cards by id.
 
+```javascript
+import * as cards from 'deckofcards-api';
+
+const deck = await cards.deck();
+await cards.reshuffle(deck.deck_id);
+
+// optionally only shuffle remaining cards
+await cards.reshuffle(deck.deck_id, { remaining: true });
 ```
-const cards = require('deckofcards-api')
 
-const deck = cards.deck()
-cards.reshuffle(deck.deck_id)
-
-```
-
-##### draw(deckId)
+##### draw(deckId, options)
 
 Draw cards.
 
+```javascript
+import * as cards from 'deckofcards-api';
+
+const deck = await cards.deck();
+
+const count = { count: 2 };
+await cards.draw(deck.deck_id, count);
 ```
-const cards = require('deckofcards-api')
 
-const deck = cards.deck()
-
-const count = { count: 2 } // required
-cards.draw(deck.deck_id, count)
-
-```
-
-##### pile(deckId, pileName).add(cards)
+##### pile(deckId, pileName).add(options)
 
 Add cards to a pile.
 
-```
-const cards = require('deckofcards-api')
+```javascript
+import * as cards from 'deckofcards-api';
 
-const deck = cards.deck()
+const deck = await cards.deck();
 
-const
-    pileName = 'discards',  // required
-    cards = [ 'AS', 'KS', 'QS', JS', '10S' ]  // required
-cards.pile(deckId, pileName).add(cards)
-
+const pileName = 'discards';
+const cardsToAdd = { cards: ['AS', 'KS', 'QS', 'JS', '10S'] };
+await cards.pile(deck.deck_id, pileName).add(cardsToAdd);
 ```
 
-##### pile(deckId, pileName).draw(cards)
+##### pile(deckId, pileName).draw(options)
 
-Draw cards from a pile by card names, count or bottom.
+Draw cards from a pile by card names, count, bottom, or random.
 
-```
-const cards = require('deckofcards-api')
+```javascript
+import * as cards from 'deckofcards-api';
 
-const deck = cards.deck()
+const deck = await cards.deck();
+const pileName = 'discards';
 
-const
-    pileName = 'discards',              // required
-    cards = { cards: [ 'AS', 'KS' ] }   // required
-cards.pile(deckId, pileName).draw(cards)
+// Draw specific cards
+await cards.pile(deck.deck_id, pileName).draw({ cards: ['AS', 'KS'] });
 
-// OR
+// OR draw by count
+await cards.pile(deck.deck_id, pileName).draw({ count: 2 });
 
-const
-    pileName = 'discards',  // required
-    count = { count: 2 }    // required
-cards.pile(deckId, pileName).draw(count)
+// OR draw from bottom
+await cards.pile(deck.deck_id, pileName).draw({ bottom: true });
 
-// OR
-
-const
-    pileName = 'discards',  // required
-    bottom = { bottom: true }    // required
-cards.pile(deckId, pileName).draw(bottom)
-
+// OR draw random
+await cards.pile(deck.deck_id, pileName).draw({ random: true });
 ```
 
 ##### pile(deckId, pileName).shuffle()
 
 Shuffle the pile.
 
-```
-const cards = require('deckofcards-api')
+```javascript
+import * as cards from 'deckofcards-api';
 
-const deck = cards.deck()
-
-const pileName = 'discards' // required
-cards.pile(deckId, pileName).shuffle()
-
+const deck = await cards.deck();
+const pileName = 'discards';
+await cards.pile(deck.deck_id, pileName).shuffle();
 ```
 
 ##### pile(deckId, pileName).show()
 
 Show cards in the pile.
 
+```javascript
+import * as cards from 'deckofcards-api';
+
+const deck = await cards.deck();
+const pileName = 'discards';
+await cards.pile(deck.deck_id, pileName).show();
 ```
-const cards = require('deckofcards-api')
 
-const deck = cards.deck()
+##### pile(deckId, pileName).return(options)
 
-const pileName = 'discards' // required
-cards.pile(deckId, pileName).show()
+Return cards from a pile back to the deck.
 
+```javascript
+import * as cards from 'deckofcards-api';
+
+const deck = await cards.deck();
+const pileName = 'discards';
+
+// Return specific cards
+await cards.pile(deck.deck_id, pileName).return({ cards: ['AS', 'KS'] });
+
+// OR return all cards from pile
+await cards.pile(deck.deck_id, pileName).return();
+```
+
+##### returnCards(deckId, options)
+
+Return cards to the deck.
+
+```javascript
+import * as cards from 'deckofcards-api';
+
+const deck = await cards.deck();
+
+// Return specific cards to deck
+await cards.returnCards(deck.deck_id, { cards: ['AS', 'KS'] });
+
+// OR return all drawn cards
+await cards.returnCards(deck.deck_id);
 ```
