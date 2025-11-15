@@ -1,41 +1,57 @@
 {
-    "name": "deckofcards-api",
-    "version": "3.0.0",
-    "description": "Unofficial wrapper for Deck of Cards API",
-    "main": "index.js",
-    "type": "module",
-    "exports": {
-        ".": {
-            "import": "./index.js",
-            "default": "./index.js"
-        }
-    },
-    "files": [
-        "index.js",
-        "README.md",
-        "LICENSE"
-    ],
-    "scripts": {
-        "test": "npx mocha test"
-    },
-    "keywords": [
-        "deck",
-        "cards",
-        "card deck",
-        "deck of cards",
-        "deck of cards api"
-    ],
-    "author": "Cydney Mikel",
-    "license": "MIT",
-    "dependencies": {
-        "superagent": "^10.2.3"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/cydneymikel/deckofcards-api"
-    },
-    "devDependencies": {
-        "chai": "^6.2.0",
-        "mocha": "^11.7.5"
+  "name": "deckofcards-api",
+  "version": "3.1.0",
+  "description": "Unofficial wrapper for Deck of Cards API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "format": "prettier --write \"**/*.{js,ts,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,ts,json,md}\"",
+    "prepublishOnly": "npm run build",
+    "pretest": "npm run build",
+    "test": "mocha 'test/**/*.spec.js'"
+  },
+  "keywords": [
+    "deck",
+    "cards",
+    "card deck",
+    "deck of cards",
+    "deck of cards api"
+  ],
+  "author": "Cydney Mikel",
+  "license": "MIT",
+  "dependencies": {
+    "superagent": "^10.2.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cydneymikel/deckofcards-api"
+  },
+  "devDependencies": {
+    "@types/chai": "^5.2.3",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.10.1",
+    "@types/superagent": "^8.1.9",
+    "chai": "^6.2.0",
+    "mocha": "^11.7.5",
+    "nock": "^14.0.10",
+    "prettier": "^3.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
 }
